@@ -4,7 +4,7 @@
 // @access Public
 exports.getBootcamps = (req, res, next) => {
     res.status(200)
-        .json({success:true, msg:`Get All bootcamps`, hello:req.hello});
+        .json({success:true, msg:`Get All bootcamps`});
 }
 
 // @desc Get all bootcamp
