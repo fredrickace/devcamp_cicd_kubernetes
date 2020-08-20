@@ -9,14 +9,54 @@ const Bootcamp = require('../models/Bootcamp');
 // @access Public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
     let query;
-    let queryString = JSON.stringify(req.query);
+
+    //Copy req.query
+    const reqQuery = {...req.query};
+
+    //Fields to execute
+    const removeFields = ['select', 'sort'];
+
+    //Loop over removeFields and delete them from reqQuery
+    removeFields.forEach(param => console.log(`Fred:${param}`));
+    removeFields.forEach(param => delete reqQuery[param]);
+
+    console.log(reqQuery);
+
+    //Create query String
+    let queryString = JSON.stringify(reqQuery);
+
+    //Create operators ($gt, $gte etc)
     queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}` );
-    console.log(queryString);
+    console.log(`Query String: ${queryString}`);
+
     query = Bootcamp.find(JSON.parse(queryString));
+
+    //Select Fields
+    if(req.query.select) {
+        //The mongoose selector needs the space between fields not the comma's. The string from select in the query
+        // are separated by comma's. The below code splits the string into an array using comma and join them as a
+        // string again using the space.
+        const fields = req.query.select.split(',').join(' ');
+        query = query.select(fields);
+
+    }
+
+    //Sort
+    if(req.query.sort) {
+        const sortBy = req.query.sort.split(',').join(' ');
+        query = query.sort(sortBy);
+    } else {
+        query = query.sort('-createdAt');
+    }
+
+    //Executing Query
     const bootcamps = await query;
+
     res.status(200)
         .json({success: true, count: bootcamps.length, data: bootcamps});
 });
+
+
 
 // @desc Get all bootcamp
 // @route GET /api/v1/bootcamps/:id
