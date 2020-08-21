@@ -14,25 +14,22 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
     const reqQuery = {...req.query};
 
     //Fields to execute
-    const removeFields = ['select', 'sort'];
+    const removeFields = ['select', 'sort', 'page', 'limit'];
 
     //Loop over removeFields and delete them from reqQuery
-    removeFields.forEach(param => console.log(`Fred:${param}`));
-    removeFields.forEach(param => delete reqQuery[param]);
 
-    console.log(reqQuery);
+    removeFields.forEach(param => delete reqQuery[param]);
 
     //Create query String
     let queryString = JSON.stringify(reqQuery);
 
     //Create operators ($gt, $gte etc)
-    queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}` );
-    console.log(`Query String: ${queryString}`);
+    queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
     query = Bootcamp.find(JSON.parse(queryString));
 
     //Select Fields
-    if(req.query.select) {
+    if (req.query.select) {
         //The mongoose selector needs the space between fields not the comma's. The string from select in the query
         // are separated by comma's. The below code splits the string into an array using comma and join them as a
         // string again using the space.
@@ -42,20 +39,42 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
     }
 
     //Sort
-    if(req.query.sort) {
+    if (req.query.sort) {
         const sortBy = req.query.sort.split(',').join(' ');
         query = query.sort(sortBy);
     } else {
         query = query.sort('-createdAt');
     }
 
+    //Pagination
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 100;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const total = await Bootcamp.countDocuments();
+    console.log(`Total:${total}`);
+    query = query.skip(startIndex).limit(limit);
+
     //Executing Query
     const bootcamps = await query;
+    const pagination = {};
+    if(endIndex < total) {
+        pagination.next = {
+            page: page+1,
+            limit
+        }
+    }
+
+    if(startIndex > 0) {
+        pagination.previous = {
+            page:endIndex > total? total: page-1,
+            limit
+        }
+    }
 
     res.status(200)
-        .json({success: true, count: bootcamps.length, data: bootcamps});
+        .json({success: true, count: bootcamps.length, pagination, data: bootcamps});
 });
-
 
 
 // @desc Get all bootcamp
@@ -131,11 +150,11 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 //    Earth Radius = 3693 miles/6378 Kms
     const radius = distance / 6378.1;
     const bootcamp = await Bootcamp.find({
-        location: { $geoWithin: { $centerSphere: [ [ lng, lat ], radius ] } }
+        location: {$geoWithin: {$centerSphere: [[lng, lat], radius]}}
     });
 
     res.status(200).json({
-        success:true,
+        success: true,
         count: bootcamp.length,
         data: bootcamp
     })
