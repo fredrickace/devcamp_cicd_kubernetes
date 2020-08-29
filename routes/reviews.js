@@ -1,7 +1,8 @@
 const express = require('express');
 
 const {
-    getReviews
+    getReviews,
+    getSingleReview
 } = require('../controllers/reviews');
 
 const Review = require('../models/Review');
@@ -16,6 +17,8 @@ router
             select: 'name description'
         }),
         getReviews);
-
+router
+    .route('/:id')
+    .get(getSingleReview);
 
 module.exports = router;
