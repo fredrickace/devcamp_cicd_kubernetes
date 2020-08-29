@@ -27,11 +27,11 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.getSingleReview = asyncHandler(async (req, res, next) => {
     const review = await Review.findById(req.params.id).populate({
-       path:'bootcamp',
-       select: 'name description'
+        path: 'bootcamp',
+        select: 'name description'
     });
 
-    if(!review) {
+    if (!review) {
         return next(new ErrorResponse(`No review found with the id of ${req.params.id}`), 404);
     }
 
@@ -41,6 +41,26 @@ exports.getSingleReview = asyncHandler(async (req, res, next) => {
             success: true,
             review
         });
+});
 
+// @desc Add review
+// @route POST /api/v1/bootcamps/:bootcampId/review
+// @access Private
+exports.addReview = asyncHandler(async (req, res, next) => {
+    req.body.bootcamp = req.params.bootcampId;
+    req.body.user = req.user.id;
 
+    const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+    if (!bootcamp) {
+        return next(new ErrorResponse(`No bootcamp found for ${req.params.bootcampId}`, 404));
+    }
+
+    const review = await Review.create(req.body);
+
+    res
+        .status(201)
+        .json({
+            success: true,
+            review
+        });
 });
