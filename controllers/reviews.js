@@ -64,3 +64,60 @@ exports.addReview = asyncHandler(async (req, res, next) => {
             review
         });
 });
+
+// @desc Update review
+// @route PUT /api/v1/reviews/:id
+// @access Private
+exports.updateReview = asyncHandler(async (req, res, next) => {
+
+    let review = await Review.findById(req.params.id);
+    if (!review) {
+        return next(new ErrorResponse(`No review found for ${req.params.id}`, 404));
+    }
+    //Make sure review belongs to user or user is admin
+    if (!isOwnerOrAdmin(review.user.toString(), req.user.id, req.user.role )) {
+        return next(new ErrorResponse(`${req.user.name} is not the author of this review. Cannot edit it`, 401));
+    }
+
+
+    review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+        new : true,
+        runValidators: true
+    });
+
+    await review.save();
+    res
+        .status(200)
+        .json({
+            success: true,
+            review
+        });
+});
+
+// @desc Delete review
+// @route DELETE /api/v1/reviews/:id
+// @access Private
+exports.deleteReview = asyncHandler(async (req, res, next) => {
+
+    let review = await Review.findById(req.params.id);
+    if (!review) {
+        return next(new ErrorResponse(`No review found for ${req.params.id}`, 404));
+    }
+    //Make sure review belongs to user or user is admin
+    if (!isOwnerOrAdmin(review.user.toString(), req.user.id, req.user.role )) {
+        return next(new ErrorResponse(`${req.user.name} is not the author of this review. Cannot edit it`, 401));
+    }
+
+    await review.remove();
+    res
+        .status(200)
+        .json({
+            success: true,
+            data:{}
+        });
+});
+
+
+isOwnerOrAdmin = (reviewUserID, requestedUserId, requestedUserRole) => {
+    return reviewUserID === requestedUserId || requestedUserRole === 'admin';
+};
