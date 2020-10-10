@@ -14,8 +14,9 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     //Create query String
     let queryString = JSON.stringify(reqQuery);
 
-    //Create operators ($gt, $gte etc)
-    queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+    //Create operators (gt, gte etc are mongoose operators and needed to add $sign before them like $lte, $gte etc)
+    queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);// The two forward slashes is
+    // the regex and /b is the word boundary
 
     //Finding resource
     query = model.find(JSON.parse(queryString))
