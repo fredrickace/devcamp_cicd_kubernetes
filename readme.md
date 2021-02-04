@@ -21,5 +21,8 @@ npm run dev
 # Run in prod mode
 npm start
 ```
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/81820bf56ea88a2c0a44)
+
 - Version:1.0.0
 - License: MIT

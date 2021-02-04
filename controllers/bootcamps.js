@@ -95,6 +95,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`User ${req.user.name} is not authorized to update this bootcamp`, 401));
     }
 
+    //TODO should be deleted. Why in findIDAndUpdate here. Verify and delete the below code
     bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
