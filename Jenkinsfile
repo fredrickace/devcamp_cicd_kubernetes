@@ -6,7 +6,7 @@ pipeline {
     tools {
         nodejs "node"
 
-
+        tool name: 'Docker', type: 'dockerTool'
     }
 
     stages {
@@ -18,21 +18,18 @@ pipeline {
             }
 
         }
-        environment {
-              TOOL =  tool name: 'Docker', type: 'dockerTool'
-              }
-              stage('Docker Build Image') {
-                          steps {
-                              sh "docker build . -t devcamper"
-                          }
-                      }
 
-                      stage('Docker Compose') {
-                          steps {
-                              sh "docker-compose up"
-                          }
-                      }
-          }
+        stage('Docker Build Image') {
+            steps {
+                sh "docker build . -t devcamper"
+            }
+        }
+
+        stage('Docker Compose') {
+            steps {
+                sh "docker-compose up"
+            }
+        }
 
     }
 }
