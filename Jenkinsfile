@@ -6,7 +6,7 @@ pipeline {
     tools {
         nodejs "node"
 
-        tool name: 'Docker', type: 'dockerTool'
+        dockerTool "Docker"
     }
 
     stages {
