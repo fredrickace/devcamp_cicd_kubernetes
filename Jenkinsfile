@@ -19,19 +19,13 @@ pipeline {
 
         stage('Docker Build Image') {
             steps {
-                sh docker build . \-t devcamper
+                sh "docker build . -t devcamper"
             }
         }
 
-        stage('Docker Build Image') {
+        stage('Docker Compose') {
             steps {
-                sh docker build . \-t devcamper
-            }
-        }
-
-        stage('Docker Composer') {
-            steps {
-                sh docker-compose up
+                sh "docker-compose up"
             }
         }
     }
