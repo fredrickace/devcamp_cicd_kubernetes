@@ -20,7 +20,7 @@ pipeline {
         }
         environment {
               TOOL =  tool name: 'Docker', type: 'dockerTool'
-
+              }
               stage('Docker Build Image') {
                           steps {
                               sh "docker build . -t devcamper"
