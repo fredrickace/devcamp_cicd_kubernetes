@@ -12,7 +12,7 @@ pipeline {
 
             steps {
                 //Check out
-                git branch: 'master' credentialsId: 'Jenkins_Devcamper', url: 'git@github.com:fredrickace/Devcamp_Backend.git'
+                git branch: 'master', credentialsId: 'Jenkins_Devcamper', url: 'git@github.com:fredrickace/Devcamp_Backend.git'
             }
 
         }
