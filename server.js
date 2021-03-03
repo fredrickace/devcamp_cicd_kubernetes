@@ -19,7 +19,7 @@ const connectDB = require('./config/db');
 dotEnv.config({path:'./config/config.env'});
 
 //Connect to database
-connectDB();
+//connectDB();
 
 //Route Files
 
