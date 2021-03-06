@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:stretch-slim
 
 RUN mkdir -p /app/src
 # Create app directory
@@ -15,4 +15,4 @@ COPY . .
 #Expose port and start application
 EXPOSE 5000
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start" ]
