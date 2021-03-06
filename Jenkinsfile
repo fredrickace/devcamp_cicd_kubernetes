@@ -14,14 +14,14 @@ pipeline {
 
             steps {
                 //Check out
-                git branch: 'master', credentialsId: 'Jenkins_Devcamper', url: 'git@github.com:fredrickace/Devcamp_Backend.git'
+                git branch: 'master', url: 'git@github.com:fredrickace/devcamp_CICD.git'
             }
 
         }
 
         stage('Docker Build Image') {
             steps {
-                sh "docker build . -t devcamper"
+                sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
             }
         }
 
