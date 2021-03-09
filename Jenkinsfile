@@ -16,7 +16,7 @@ pipeline {
 
             steps {
                 //Check out
-                git branch: 'main', credentialsId: 'git_fredrick', url: 'git@github.com:fredrickace/devcamp_CICD.git'
+                git branch: 'main', credentialsId: 'git_fredrick', url: 'https://github.com/fredrickace/devcamp_CICD.git'
             }
 
         }
