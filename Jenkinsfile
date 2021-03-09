@@ -5,11 +5,11 @@ pipeline {
 
     triggers { pollSCM('* * * * *') }
 
-    tools {
-        nodejs "node"
-
-        dockerTool "Docker"
-    }
+//     tools {
+//         nodejs "node"
+//
+//         dockerTool "Docker"
+//     }
 
     stages {
         stage('Checkout') {
