@@ -36,6 +36,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Remove local images') {
+            steps {
+
+                sh 'docker image rm fredrickcyril/devcamper_qa:${env.BUILD_NUMBER} -f'
+
+                sh 'docker image rm fredrickcyril/devcamper_qa:latest -f'
+
+                sh 'docker image rm fredrickcyril/jenkins-docker:v1 -f'
+            }
+        }
     }
 
 }
