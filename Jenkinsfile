@@ -1,4 +1,8 @@
 pipeline {
+
+    environment {
+        dockerImage = ''
+    }
     agent {
       label 'docker'
     }
@@ -22,10 +26,10 @@ pipeline {
                     docker.withRegistry('', 'docker_pwd')
                     {
 
-                        def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+                        dockerImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
 
                         /* Push the container to the custom Registry */
-                        customImage.push()
+                        dockerImage.push()
                     }
                 }
             }
