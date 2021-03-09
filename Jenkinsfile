@@ -44,7 +44,7 @@ pipeline {
 
                 sh "docker rmi fredrickcyril/devcamper_qa:latest"
 
-                sh "docker rmi fredrickcyril/jenkins-docker:v1"
+                sh "docker rmi fredrickcyril/jenkins-docker:v1 -f"
             }
         }
     }
