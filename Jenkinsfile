@@ -17,8 +17,8 @@ pipeline {
         }
 
         stage('Docker Build Image') {
-            steps {
-
+            node {
+            push image
             docker.withRegistry('', 'docker_pwd') {
 
                 def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
@@ -31,11 +31,11 @@ pipeline {
             }
         }
 
-        stage('Docker Push') {
-            steps {
-                sh "docker push fredrickcyril/devcamper:${env.BUILD_NUMBER}"
-            }
-        }
+//         stage('Docker Push') {
+//             steps {
+//                 sh "docker push fredrickcyril/devcamper:${env.BUILD_NUMBER}"
+//             }
+//         }
 
 //         stage('Docker Compose') {
 //             steps {
