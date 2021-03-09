@@ -18,8 +18,16 @@ pipeline {
 
         stage('Docker Build Image') {
             steps {
-                sh "docker login $env:docker_pwd"
-                sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
+
+            docker.withRegistry('', 'docker_pwd') {
+
+                def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+
+                /* Push the container to the custom Registry */
+                customImage.push()
+            }
+//                 sh "docker login $env:docker_pwd"
+//                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
             }
         }
 
