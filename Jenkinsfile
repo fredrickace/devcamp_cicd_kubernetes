@@ -30,6 +30,8 @@ pipeline {
 
                         /* Push the container to the custom Registry */
                         dockerImage.push()
+
+                        dockerImage.push('latest')
                     }
                 }
             }
