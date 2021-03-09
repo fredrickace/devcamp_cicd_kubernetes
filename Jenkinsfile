@@ -16,20 +16,20 @@ pipeline {
 
         }
 
-        stage('Docker Build Image') {
-            node {
-            push image
-            docker.withRegistry('', 'docker_pwd') {
-
-                def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
-
-                /* Push the container to the custom Registry */
-                customImage.push()
-            }
-//                 sh "docker login $env:docker_pwd"
-//                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
-            }
-        }
+//         stage('Docker Build Image') {
+//             node {
+//             push image
+//             docker.withRegistry('', 'docker_pwd') {
+//
+//                 def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+//
+//                 /* Push the container to the custom Registry */
+//                 customImage.push()
+//             }
+// //                 sh "docker login $env:docker_pwd"
+// //                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
+//             }
+//         }
 
 //         stage('Docker Push') {
 //             steps {
@@ -42,5 +42,18 @@ pipeline {
 //                 sh "docker-compose up"
 //             }
 //         }
+    }
+
+    node {
+        push image
+        docker.withRegistry('', 'docker_pwd') {
+
+            def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+
+            /* Push the container to the custom Registry */
+            customImage.push()
+        }
+    //                 sh "docker login $env:docker_pwd"
+    //                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
     }
 }
