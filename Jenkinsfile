@@ -4,7 +4,7 @@ pipeline {
     }
 
     triggers { pollSCM('* * * * *') }
-
+`
 //     tools {
 //         nodejs "node"
 //
@@ -24,6 +24,12 @@ pipeline {
         stage('Docker Build Image') {
             steps {
                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                sh "docker push fredrickcyril/devcamper:${env.BUILD_NUMBER}"
             }
         }
 
