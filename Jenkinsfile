@@ -44,14 +44,18 @@ pipeline {
 //         }
     }
 
-    node {
-        push image
-        docker.withRegistry('', 'docker_pwd') {
+    node('docker') {
 
-            def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+        stage (build)
+        {
+            docker.withRegistry('', 'docker_pwd')
+            {
 
-            /* Push the container to the custom Registry */
-            customImage.push()
+                def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+
+                /* Push the container to the custom Registry */
+                customImage.push()
+            }
         }
     //                 sh "docker login $env:docker_pwd"
     //                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
