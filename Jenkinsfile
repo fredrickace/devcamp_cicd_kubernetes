@@ -13,34 +13,23 @@ pipeline {
                 //Check out
                 git branch: 'main', credentialsId: 'git_fredrick', url: 'https://github.com/fredrickace/devcamp_CICD.git'
             }
-
         }
 
         stage('Docker Build Image') {
-            script {
-            docker.withRegistry('', 'docker_pwd') {
+            steps {
+                script {
 
-                def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+                    docker.withRegistry('', 'docker_pwd')
+                    {
 
-                /* Push the container to the custom Registry */
-                customImage.push()
-            }
-//                 sh "docker login $env:docker_pwd"
-//                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
+                        def customImage = docker.build("fredrickcyril/devcamper:${env.BUILD_NUMBER}")
+
+                        /* Push the container to the custom Registry */
+                        customImage.push()
+                    }
+                }
             }
         }
-
-//         stage('Docker Push') {
-//             steps {
-//                 sh "docker push fredrickcyril/devcamper:${env.BUILD_NUMBER}"
-//             }
-//         }
-
-//         stage('Docker Compose') {
-//             steps {
-//                 sh "docker-compose up"
-//             }
-//         }
     }
 
 }
