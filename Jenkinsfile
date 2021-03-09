@@ -18,6 +18,7 @@ pipeline {
 
         stage('Docker Build Image') {
             steps {
+                sh "docker login $env:docker_pwd"
                 sh "docker build . -t fredrickcyril/devcamper:${env.BUILD_NUMBER}"
             }
         }
