@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: web-deploy
+spec:
+  rules:
+    - host: qa.316enterprises.com
+      http:
+        paths:
+          - backend:
+              serviceName: web-deploy
+              servicePort: 80
