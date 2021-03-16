@@ -63,7 +63,11 @@ pipeline {
 
             stages {
                 stage('Deploy'){
-                    kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: "svc-nodeport.yml, svc-loadbalancer.yml, deploy.yml")
+                    steps {
+                       script {
+                           kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: "svc-nodeport.yml, svc-loadbalancer.yml, deploy.yml")
+                       }
+                    }
                 }
             }
         }
