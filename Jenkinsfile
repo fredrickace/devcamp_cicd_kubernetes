@@ -33,7 +33,7 @@ pipeline {
                             docker.withRegistry('', 'docker_pwd')
                             {
 
-                                dockerImage = docker.build("fredrickcyril/devcamper_qa:${env.BUILD_NUMBER}")
+                                dockerImage = docker.build("fredrickcyril/devcamper_testing:${env.BUILD_NUMBER}")
 
                                 /* Push the container to the custom Registry */
                                 dockerImage.push()
@@ -47,9 +47,9 @@ pipeline {
                 stage('Remove local images') {
                     steps {
 
-                        sh "docker rmi fredrickcyril/devcamper_qa:${env.BUILD_NUMBER}"
+                        sh "docker rmi fredrickcyril/devcamper_testing:${env.BUILD_NUMBER}"
 
-                        sh "docker rmi fredrickcyril/devcamper_qa:latest"
+                        sh "docker rmi fredrickcyril/devcamper_testing:latest"
 
                     }
                 }
