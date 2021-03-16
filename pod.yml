@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dev-camp
+  labels:
+    app: web
+spec:
+  containers:
+    - name: web-ctr
+      image: fredrickcyril/devcamper_testing:latest
+      ports:
+        - containerPort: 5000
