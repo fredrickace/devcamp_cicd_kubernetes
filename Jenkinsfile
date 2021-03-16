@@ -11,39 +11,61 @@ pipeline {
 
 
     stages {
-        stage('Checkout') {
-
-            steps {
-                //Check out
-                git branch: 'main', credentialsId: 'git_fredrick', url: 'https://github.com/fredrickace/devcamp_CICD.git'
+        stage('Build & Push Docker Image') {
+            agent {
+                label 'docker'
             }
-        }
 
-        stage('Docker Build Image') {
-            steps {
-                script {
+            stages {
 
-                    docker.withRegistry('', 'docker_pwd')
-                    {
+                stage('Checkout') {
 
-                        dockerImage = docker.build("fredrickcyril/devcamper_qa:${env.BUILD_NUMBER}")
+                    steps {
+                        //Check out
+                        git branch: 'main', credentialsId: 'git_fredrick', url: 'https://github.com/fredrickace/devcamp_CICD.git'
+                    }
+                }
 
-                        /* Push the container to the custom Registry */
-                        dockerImage.push()
+                stage('Docker Build Image') {
+                    steps {
+                        script {
 
-                        dockerImage.push('latest')
+                            docker.withRegistry('', 'docker_pwd')
+                            {
+
+                                dockerImage = docker.build("fredrickcyril/devcamper_qa:${env.BUILD_NUMBER}")
+
+                                /* Push the container to the custom Registry */
+                                dockerImage.push()
+
+                                dockerImage.push('latest')
+                            }
+                        }
+                    }
+                }
+
+                stage('Remove local images') {
+                    steps {
+
+                        sh "docker rmi fredrickcyril/devcamper_qa:${env.BUILD_NUMBER}"
+
+                        sh "docker rmi fredrickcyril/devcamper_qa:latest"
+
                     }
                 }
             }
         }
 
-        stage('Remove local images') {
-            steps {
+        stage('Deploy in Kuberenetes') {
+            agent{
+                label 'kubepod'
+            }
 
-                sh "docker rmi fredrickcyril/devcamper_qa:${env.BUILD_NUMBER}"
-
-                sh "docker rmi fredrickcyril/devcamper_qa:latest"
-
+            stages {
+                stage('Deploy'){
+                    kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: "svc-nodeport.yml, svc-loadbalancer
+                    .yml, deploy.yml")
+                }
             }
         }
     }
