@@ -3,6 +3,7 @@ pipeline {
     environment {
         dockerImage = ''
     }
+    agent any
 //     agent {
 //       label 'docker'
 //     }
