@@ -74,4 +74,22 @@ pipeline {
         }
     }
 
+    post {
+          aborted {
+                slackSend channel: 'build', message: 'Build V:alpha1.${env.BUILD_NUMBER} aborted'
+          }
+          success {
+                slackSend channel: 'build', message: 'Build V:alpha1.${env.BUILD_NUMBER} Success'
+
+          }
+          failure {
+                slackSend channel: 'build', message: 'Build V:alpha1.${env.BUILD_NUMBER} Failure'
+
+          }
+          unsuccessful {
+                slackSend channel: 'build', message: 'Build V:alpha1.${env.BUILD_NUMBER} unsuccessful'
+
+          }
+        }
+
 }
