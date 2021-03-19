@@ -12,20 +12,20 @@ pipeline {
 
 
     stages {
+
+    stage('get_commit_msg') {
+        steps {
+            script {
+                env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B ${GIT_COMMIT}', returnStdout: true).trim()
+            }
+        }
+    }
         stage('Build & Push Docker Image') {
             agent {
                 label 'docker'
             }
 
             stages {
-
-                stage('Checkout') {
-
-                    steps {
-                        //Check out
-                        git branch: 'main', credentialsId: 'git_fredrick', url: 'https://github.com/fredrickace/devcamp_CICD.git'
-                    }
-                }
 
                 stage('Docker Build Image') {
                     steps {
@@ -76,7 +76,7 @@ pipeline {
 
     post {
           aborted {
-                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} aborted"
+                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} aborted. \n ${env.GIT_COMMIT_MSG}"
           }
           success {
                 slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} Success"
