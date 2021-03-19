@@ -1,9 +1,11 @@
 pipeline {
 
+    def APP_MAJOR_VERSION = "alpha"
+    def APP_MINOR_VERSION = "1"
+    def BUILD_NUMBER = "${env.BUILD_NUMBER}"
     environment {
         dockerImage = ''
-        APP_MAJOR_VERSION = "alpha"
-        APP_MINOR_VERSION = "1"
+
         APP_FULL_VERSION = getAppVersion()
     }
     agent any
@@ -102,10 +104,8 @@ pipeline {
 
           }
         }
-
-        def getAppVersion() {
-            return "${env.APP_MAJOR_VERSION}.${env.APP_MINOR_VERSION}.${env.BUILD_NUMBER}"
-        }
 }
 
-
+def getAppVersion() {
+    return "${APP_MAJOR_VERSION}.${APP_MINOR_VERSION}.${BUILD_NUMBER}"
+}
