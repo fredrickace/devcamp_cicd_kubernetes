@@ -8,7 +8,7 @@ pipeline {
 //       label 'docker'
 //     }
 
-    triggers { pollSCM('TZ=Canada/Pacific\n0 0 * * *') }
+    triggers { pollSCM('* * * * *') }
 
 
     stages {
@@ -71,8 +71,8 @@ pipeline {
                         cat "deploy_latest.yml"
 
                        script {
-                           kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: "svc-nodeport.yml,
-                           svc-loadbalancer.yml, deploy_latest.yml")
+                           kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: """svc-nodeport.yml,
+                           svc-loadbalancer.yml, deploy_latest.yml""")
                        }
                     }
                 }
