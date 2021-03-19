@@ -102,8 +102,10 @@ pipeline {
 
           }
         }
+
+        def getAppVersion() {
+            return "${env.APP_MAJOR_VERSION}.${env.APP_MINOR_VERSION}.${env.BUILD_NUMBER}"
+        }
 }
 
-def getAppVersion() {
-    return "${env.APP_MAJOR_VERSION}.${env.APP_MINOR_VERSION}.${env.BUILD_NUMBER}"
-}
+
