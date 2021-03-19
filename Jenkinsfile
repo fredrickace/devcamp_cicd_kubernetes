@@ -2,7 +2,9 @@ pipeline {
 
     environment {
         dockerImage = ''
-        APP_VERSION = "alpha"
+        APP_MAJOR_VERSION = "alpha"
+        APP_MINOR_VERSION = "1"
+        APP_FULL_VERSION = getAppVersion()
     }
     agent any
 //     agent {
@@ -32,14 +34,13 @@ pipeline {
                     steps {
 
                         sh "chmod +x changeVersion.sh"
-                        sh "./changeVersion.sh ${env.BUILD_NUMBER}"
+                        sh "./changeVersion.sh ${env.APP_FULL_VERSION}"
                         script {
 
                             docker.withRegistry('', 'docker_pwd')
                             {
 
-                                dockerImage = docker.build("""fredrickcyril/devcamper_testing:${env.APP_VERSION}.${env
-                                .BUILD_NUMBER}""")
+                                dockerImage = docker.build("""fredrickcyril/devcamper_testing:${env.APP_FULL_VERSION}""")
 
                                 /* Push the container to the custom Registry */
                                 dockerImage.push()
@@ -53,7 +54,7 @@ pipeline {
                 stage('Remove local images') {
                     steps {
 
-                        sh "docker rmi fredrickcyril/devcamper_testing:${env.APP_VERSION}.${env.BUILD_NUMBER}"
+                        sh "docker rmi fredrickcyril/devcamper_testing:${env.APP_FULL_VERSION}"
 
                         sh "docker rmi fredrickcyril/devcamper_testing:latest"
 
@@ -72,7 +73,7 @@ pipeline {
                     steps {
 
                         sh "chmod +x changeTag.sh"
-                        sh "./changeTag.sh ${env.APP_VERSION}.${env.BUILD_NUMBER}"
+                        sh "./changeTag.sh ${env.APP_FULL_VERSION}"
 
                        script {
                            kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: """svc-nodeport.yml,
@@ -86,20 +87,23 @@ pipeline {
 
     post {
           aborted {
-                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} aborted. \n ${env.GIT_COMMIT_MSG}"
+                slackSend channel: 'builds', message: "Build V:${env.APP_FULL_VERSION} aborted. \n ${env.GIT_COMMIT_MSG}"
           }
           success {
-                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} Success"
+                slackSend channel: 'builds', message: "Build V:${env.APP_FULL_VERSION} Success"
 
           }
           failure {
-                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} Failure"
+                slackSend channel: 'builds', message: "Build V:${env.APP_FULL_VERSION} Failure"
 
           }
           unsuccessful {
-                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} unsuccessful"
+                slackSend channel: 'builds', message: "Build V:${env.APP_FULL_VERSION} unsuccessful"
 
           }
         }
+}
 
+def getAppVersion() {
+    return "${env.APP_MAJOR_VERSION}.${env.APP_MINOR_VERSION}.${env.BUILD_NUMBER}"
 }
