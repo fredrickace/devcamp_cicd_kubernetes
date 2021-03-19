@@ -7,6 +7,6 @@ metadata:
 spec:
   containers:
     - name: web-ctr
-      image: fredrickcyril/devcamper_testing:latest
+      image: fredrickcyril/devcamper_testing:tagVersion
       ports:
         - containerPort: 5000

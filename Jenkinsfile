@@ -65,8 +65,14 @@ pipeline {
             stages {
                 stage('Deploy'){
                     steps {
+
+                        sh "chmod +x changeTag.sh"
+                        sh './changeTag.sh ${env.BUILD_NUMBER}'
+                        cat "deploy_latest.yml"
+
                        script {
-                           kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: "svc-nodeport.yml, svc-loadbalancer.yml, deploy.yml")
+                           kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: "svc-nodeport.yml,
+                           svc-loadbalancer.yml, deploy_latest.yml")
                        }
                     }
                 }

@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 1
       containers:
         - name: devcamp
-          image: fredrickcyril/devcamper_testing:latest
+          image: fredrickcyril/devcamper_testing:tagVersion
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
