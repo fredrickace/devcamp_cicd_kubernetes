@@ -5,7 +5,7 @@ pipeline {
         dockerImage = ''
         APP_MAJOR_VERSION = "alpha"
         APP_MINOR_VERSION = "1"
-        APP_FULL_VERSION = getAppVersion()
+        APP_FULL_VERSION = "${env.APP_MAJOR_VERSION}.${env.APP_MINOR_VERSION}.${env.BUILD_NUMBER}"
     }
     agent any
 //     agent {
