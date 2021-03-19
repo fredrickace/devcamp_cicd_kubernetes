@@ -76,18 +76,18 @@ pipeline {
 
     post {
           aborted {
-                slackSend channel: 'builds', message: 'Build V:alpha1.${env.BUILD_NUMBER} aborted'
+                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} aborted"
           }
           success {
-                slackSend channel: 'builds', message: 'Build V:alpha1.${env.BUILD_NUMBER} Success'
+                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} Success"
 
           }
           failure {
-                slackSend channel: 'builds', message: 'Build V:alpha1.${env.BUILD_NUMBER} Failure'
+                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} Failure"
 
           }
           unsuccessful {
-                slackSend channel: 'builds', message: 'Build V:alpha1.${env.BUILD_NUMBER} unsuccessful'
+                slackSend channel: 'builds', message: "Build V:alpha1.${env.BUILD_NUMBER} unsuccessful"
 
           }
         }
