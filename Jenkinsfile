@@ -2,7 +2,7 @@ pipeline {
 
     environment {
         dockerImage = ''
-        APP_VERSION = alpha
+        APP_VERSION = "alpha"
     }
     agent any
 //     agent {
