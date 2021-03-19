@@ -8,7 +8,7 @@ pipeline {
 //       label 'docker'
 //     }
 
-    triggers { pollSCM('* * * * *') }
+    triggers { pollSCM('TZ=Canada/Pacific\n0 0 * * *') }
 
 
     stages {
