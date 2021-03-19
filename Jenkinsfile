@@ -68,7 +68,6 @@ pipeline {
 
                         sh "chmod +x changeTag.sh"
                         sh "./changeTag.sh ${env.BUILD_NUMBER}"
-                        cat "deploy_latest.yml"
 
                        script {
                            kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: """svc-nodeport.yml,
