@@ -67,7 +67,7 @@ pipeline {
                     steps {
 
                         sh "chmod +x changeTag.sh"
-                        sh './changeTag.sh ${env.BUILD_NUMBER}'
+                        sh "./changeTag.sh ${env.BUILD_NUMBER}"
                         cat "deploy_latest.yml"
 
                        script {
