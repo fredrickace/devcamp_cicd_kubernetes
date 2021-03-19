@@ -1,11 +1,10 @@
 pipeline {
 
-    @Field def APP_MAJOR_VERSION = "alpha"
-    @Field def APP_MINOR_VERSION = "1"
-    @Field def BUILD_NUMBER = "${env.BUILD_NUMBER}"
+
     environment {
         dockerImage = ''
-
+        APP_MAJOR_VERSION = "alpha"
+        APP_MINOR_VERSION = "1"
         APP_FULL_VERSION = getAppVersion()
     }
     agent any
@@ -107,5 +106,5 @@ pipeline {
 }
 
 def getAppVersion() {
-    return "${APP_MAJOR_VERSION}.${APP_MINOR_VERSION}.${BUILD_NUMBER}"
+    return "${env.APP_MAJOR_VERSION}.${env.APP_MINOR_VERSION}.${env.BUILD_NUMBER}"
 }
