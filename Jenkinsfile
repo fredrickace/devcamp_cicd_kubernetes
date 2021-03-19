@@ -1,8 +1,8 @@
 pipeline {
 
-    APP_MAJOR_VERSION = "alpha"
-    APP_MINOR_VERSION = "1"
-    BUILD_NUMBER = "${env.BUILD_NUMBER}"
+    @Field def APP_MAJOR_VERSION = "alpha"
+    @Field def APP_MINOR_VERSION = "1"
+    @Field def BUILD_NUMBER = "${env.BUILD_NUMBER}"
     environment {
         dockerImage = ''
 
