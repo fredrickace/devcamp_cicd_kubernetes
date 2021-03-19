@@ -2,6 +2,7 @@ pipeline {
 
     environment {
         dockerImage = ''
+        APP_VERSION = alpha
     }
     agent any
 //     agent {
@@ -29,12 +30,16 @@ pipeline {
 
                 stage('Docker Build Image') {
                     steps {
+
+                        sh "chmod +x changeVersion.sh"
+                        sh "./changeVersion.sh ${env.BUILD_NUMBER}"
                         script {
 
                             docker.withRegistry('', 'docker_pwd')
                             {
 
-                                dockerImage = docker.build("fredrickcyril/devcamper_testing:${env.BUILD_NUMBER}")
+                                dockerImage = docker.build("""fredrickcyril/devcamper_testing:${env.APP_VERSION}.${env
+                                .BUILD_NUMBER}""")
 
                                 /* Push the container to the custom Registry */
                                 dockerImage.push()
@@ -48,7 +53,7 @@ pipeline {
                 stage('Remove local images') {
                     steps {
 
-                        sh "docker rmi fredrickcyril/devcamper_testing:${env.BUILD_NUMBER}"
+                        sh "docker rmi fredrickcyril/devcamper_testing:${env.APP_VERSION}.${env.BUILD_NUMBER}"
 
                         sh "docker rmi fredrickcyril/devcamper_testing:latest"
 
@@ -67,7 +72,7 @@ pipeline {
                     steps {
 
                         sh "chmod +x changeTag.sh"
-                        sh "./changeTag.sh ${env.BUILD_NUMBER}"
+                        sh "./changeTag.sh ${env.APP_VERSION}.${env.BUILD_NUMBER}"
 
                        script {
                            kubernetesDeploy(kubeconfigId: 'dev_camp_config', configs: """svc-nodeport.yml,

@@ -87,6 +87,13 @@ const server = app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV} on port ${process.env.PORT}`);
 });
 
+app.get('/test', ((req, res) => {
+    res
+        .status(200)
+        .send('Welcome To Food App. An awesome experience in the world of food is awaiting for the launch. Stay' +
+            ' tuned. Version: versionName')
+}));
+
 //Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
     console.log(`Error: ${err.message}`);
